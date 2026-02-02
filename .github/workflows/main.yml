@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       force_release:
-        description: 'Force release even if no Frida update is available'
+        description: '即使没有可用的 Frida 更新，也强制发布'
         required: false
         default: false
         type: boolean
@@ -23,26 +23,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install uv
+      - name: 安装 uv
         uses: astral-sh/setup-uv@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
 
-      - name: Build
+      - name: 构建
         run: |
           uv run python3 main.py
           echo "NEW_TAG=$(cat NEW_TAG.txt)" >> $GITHUB_ENV
         env:
           FORCE_RELEASE: ${{ github.event.inputs.force_release }}
 
-      - name: Upload artifact
+      - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
           path: build/
 
-      - name: Release
+      - name: 版本发布
         if: hashFiles('NEW_TAG.txt') != ''
         uses: ncipollo/release-action@v1
         with:
