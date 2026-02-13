@@ -63,8 +63,7 @@ def main():
                     f"原因: Florida 从 {util.strip_revision(last_project_tag)} 更新到 {last_frida_tag}"
                 )
             else:
-                logger.info(
-                    "原因: 通过 GitHub Actions 请求强制发布")
+                logger.info("原因: 通过 GitHub Actions 请求强制发布")
 
             # 写入新标签用于部署
             logger.info("正在将新标签写入 NEW_TAG.txt 用于部署...")

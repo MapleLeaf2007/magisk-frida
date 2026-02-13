@@ -20,7 +20,7 @@ import concurrent.futures
 import json
 import re
 import time
-
+import gzip
 import requests
 
 PATH_BASE = Path(__file__).parent.resolve()
@@ -70,8 +70,7 @@ def download_file(url: str, path: Path):
 
         elapsed = time.time() - start_time
         file_size_mb = path.stat().st_size / (1024 * 1024)
-        logger.info(
-            f"  ✓ 下载完成: {file_size_mb:.2f} MB 用时 {elapsed:.1f}秒")
+        logger.info(f"  ✓ 下载完成: {file_size_mb:.2f} MB 用时 {elapsed:.1f}秒")
 
     except requests.exceptions.Timeout:
         logger.error(f"  ✗ {file_name} 下载超时")
@@ -87,14 +86,9 @@ def download_file(url: str, path: Path):
 def extract_file(archive_path: Path, dest_path: Path):
     """
     解压 .gz 压缩文件到目标位置
-    
     参数:
         archive_path: .gz 归档文件路径
         dest_path: 目标文件路径
-        
-    异常:
-        lzma.LZMAError: 如果解压缩失败
-        IOError: 如果文件操作失败
     """
     logger.info(f"正在解压 '{archive_path.name}'...")
     logger.debug(f"  源文件: {archive_path}")
@@ -102,26 +96,18 @@ def extract_file(archive_path: Path, dest_path: Path):
 
     try:
         start_time = time.time()
-        with lzma.open(archive_path) as f:
+        with gzip.open(archive_path, 'rb') as f:  # ✅ 使用 gzip 而不是 lzma
             file_content = f.read()
-            path = dest_path.parent
-
-            path.mkdir(parents=True, exist_ok=True)
-
+            dest_path.parent.mkdir(parents=True, exist_ok=True)
             with open(dest_path, "wb") as out:
                 out.write(file_content)
 
         elapsed = time.time() - start_time
         file_size_mb = dest_path.stat().st_size / (1024 * 1024)
-        logger.info(
-            f"  ✓ 解压完成: {file_size_mb:.2f} MB 用时 {elapsed:.1f}秒"
-        )
+        logger.info(f"  ✓ 解压完成: {file_size_mb:.2f} MB 用时 {elapsed:.1f}秒")
 
-    except lzma.LZMAError as e:
+    except Exception as e:
         logger.error(f"  ✗ 解压缩失败: {e}")
-        raise
-    except IOError as e:
-        logger.error(f"  ✗ 文件操作失败: {e}")
         raise
 
 
@@ -218,7 +204,8 @@ def fill_module(arch: str, frida_tag: str, project_tag: str):
 
     try:
         frida_download_url = (
-            f"https://github.com/Ylarod/Florida/releases/download/{frida_tag}/")
+            f"https://github.com/Ylarod/Florida/releases/download/{frida_tag}/"
+        )
         frida_server = f"florida-server-{frida_tag}-android-{arch}.gz"
         frida_server_path = PATH_DOWNLOADS.joinpath(frida_server)
 
@@ -299,8 +286,7 @@ def package_module(project_tag: str):
                     file_count += 1
 
         zip_size_mb = module_zip.stat().st_size / (1024 * 1024)
-        logger.info(
-            f"  ✓ 包创建完成: {zip_size_mb:.2f} MB ({file_count} 个文件)")
+        logger.info(f"  ✓ 包创建完成: {zip_size_mb:.2f} MB ({file_count} 个文件)")
         logger.debug(f"  位置: {module_zip}")
 
         logger.info("  正在清理临时文件...")
@@ -355,8 +341,7 @@ def do_build(frida_tag: str, project_tag: str):
                 logger.error(f"架构构建失败: {exception}")
                 raise exception
             completed += 1
-            logger.info(
-                f"架构构建完成: {completed}/{len(archs)}")
+            logger.info(f"架构构建完成: {completed}/{len(archs)}")
 
         # 打包和最终化
         package_module(project_tag)
@@ -367,8 +352,7 @@ def do_build(frida_tag: str, project_tag: str):
         logger.info("=" * 70)
         logger.info(f"模块: MagiskFlorida-{project_tag}.zip")
         logger.info(
-            f"位置: {PATH_BUILD.joinpath(f'MagiskFlorida-{project_tag}.zip')}"
-        )
+            f"位置: {PATH_BUILD.joinpath(f'MagiskFlorida-{project_tag}.zip')}")
         logger.info("=" * 70)
 
     except Exception as e:
