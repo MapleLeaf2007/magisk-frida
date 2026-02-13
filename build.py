@@ -86,10 +86,10 @@ def download_file(url: str, path: Path):
 
 def extract_file(archive_path: Path, dest_path: Path):
     """
-    解压 .xz 压缩文件到目标位置
+    解压 .gz 压缩文件到目标位置
     
     参数:
-        archive_path: .xz 归档文件路径
+        archive_path: .gz 归档文件路径
         dest_path: 目标文件路径
         
     异常:
@@ -219,7 +219,7 @@ def fill_module(arch: str, frida_tag: str, project_tag: str):
     try:
         frida_download_url = (
             f"https://github.com/Ylarod/Florida/releases/download/{frida_tag}/")
-        frida_server = f"florida-server-{frida_tag}-android-{arch}.xz"
+        frida_server = f"florida-server-{frida_tag}-android-{arch}.gz"
         frida_server_path = PATH_DOWNLOADS.joinpath(frida_server)
 
         logger.info(f"[{arch}] 正在下载 Frida {frida_tag} 用于 {arch}...")
