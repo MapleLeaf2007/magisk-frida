@@ -35,7 +35,7 @@ echo "[*] 正在加载实用程序..." >> "$LOG_FILE"
 
 # 检查模块是否被禁用
 if [ -f "$MODPATH/disable" ]; then
-    echo "[!] 模块已被禁用 - Frida-server 将不会被控制" >> "$LOG_FILE"
+    echo "[!] 模块已被禁用 - florida-server 将不会被控制" >> "$LOG_FILE"
     echo "[-] Frida-server 已禁用" 
     string="description=开机时运行 frida-server：❌（已禁用）"
     sed -i "s/^description=.*/$string/g" "$MODPATH/module.prop"
@@ -43,38 +43,38 @@ if [ -f "$MODPATH/disable" ]; then
     exit 0
 fi
 
-echo "[*] 正在检查 Frida-server 状态..." >> "$LOG_FILE"
+echo "[*] 正在检查 florida-server 状态..." >> "$LOG_FILE"
 
 # 获取 Frida-server 进程 ID
-result="$(busybox pgrep 'frida-server' 2>/dev/null || echo '')"
+result="$(busybox pgrep 'florida-server' 2>/dev/null || echo '')"
 
 if [ ! -z "$result" ] && [ "$result" -gt 0 ] 2>/dev/null; then
-    echo "[!] Frida-server 已在运行（PID: $result）" >> "$LOG_FILE"
-    echo "[*] 正在停止 Frida-server..." >> "$LOG_FILE"
+    echo "[!] florida-server 已在运行（PID: $result）" >> "$LOG_FILE"
+    echo "[*] 正在停止 florida-server..." >> "$LOG_FILE"
     
     if busybox kill -9 "$result" 2>/dev/null; then
-      echo "[+] Frida-server 停止成功（PID: $result）" >> "$LOG_FILE"
+      echo "[+] florida-server 停止成功（PID: $result）" >> "$LOG_FILE"
     else
-      echo "[ERROR] 停止 Frida-server 失败" >> "$LOG_FILE"
+      echo "[ERROR] 停止 florida-server 失败" >> "$LOG_FILE"
     fi
 else
-    echo "[*] Frida-server 未运行，正在启动..." >> "$LOG_FILE"
+    echo "[*] florida-server 未运行，正在启动..." >> "$LOG_FILE"
     
-    FRIDA_BIN="$MODPATH/system/bin/frida-server"
+    FRIDA_BIN="$MODPATH/system/bin/florida-server"
     
     if [ ! -f "$FRIDA_BIN" ]; then
-      echo "[ERROR] 在 $FRIDA_BIN 未找到 Frida-server 二进制文件" >> "$LOG_FILE"
-      string="description=开机时运行 frida-server：❌（未找到二进制文件）"
+      echo "[ERROR] 在 $FRIDA_BIN 未找到 florida-server 二进制文件" >> "$LOG_FILE"
+      string="description=开机时运行 florida-server：❌（未找到二进制文件）"
       sed -i "s/^description=.*/$string/g" "$MODPATH/module.prop"
       exit 1
     fi
     
-    echo "[*] 正在启动 Frida-server 守护进程..." >> "$LOG_FILE"
+    echo "[*] 正在启动 florida-server 守护进程..." >> "$LOG_FILE"
     if "$FRIDA_BIN" -D >> "$LOG_FILE" 2>&1; then
-      echo "[+] Frida-server 启动成功" >> "$LOG_FILE"
+      echo "[+] florida-server 启动成功" >> "$LOG_FILE"
     else
-      echo "[ERROR] 启动 Frida-server 失败" >> "$LOG_FILE"
-      string="description=开机时运行 frida-server：❌（启动失败）"
+      echo "[ERROR] 启动 florida-server 失败" >> "$LOG_FILE"
+      string="description=开机时运行 florida-server：❌（启动失败）"
       sed -i "s/^description=.*/$string/g" "$MODPATH/module.prop"
       exit 1
     fi
@@ -86,9 +86,9 @@ echo "[*] 等待 Frida-server 稳定..." >> "$LOG_FILE"
 
 # 验证 Frida-server 是否正在运行（带超时）
 if check_frida_is_up 1; then
-  echo "[+] Frida-server 正在运行且有响应" >> "$LOG_FILE"
+  echo "[+] florida-server 正在运行且有响应" >> "$LOG_FILE"
 else
-  echo "[ERROR] Frida-server 未能正常启动" >> "$LOG_FILE"
+  echo "[ERROR] florida-server 未能正常启动" >> "$LOG_FILE"
 fi
 
 echo "" >> "$LOG_FILE"

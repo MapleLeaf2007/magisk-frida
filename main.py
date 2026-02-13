@@ -32,15 +32,15 @@ logger = logging.getLogger(__name__)
 def main():
     try:
         logger.info("=" * 60)
-        logger.info("开始 MagiskFrida 构建流程")
+        logger.info("开始 MagiskFlorida 构建流程")
         logger.info("=" * 60)
 
         # 获取版本信息
-        logger.info("正在获取 Frida 最新版本...")
+        logger.info("正在获取 Florida 最新版本...")
         last_frida_tag = util.get_last_frida_tag()
-        logger.info(f"✓ 最新 Frida 版本: {last_frida_tag}")
+        logger.info(f"✓ 最新 Florida 版本: {last_frida_tag}")
 
-        logger.info("正在获取 MagiskFrida 项目最新版本...")
+        logger.info("正在获取 MagiskFlorida 项目最新版本...")
         last_project_tag = util.get_last_project_tag()
         logger.info(f"✓ 最新项目版本: {last_project_tag}")
 
@@ -60,7 +60,7 @@ def main():
 
             if needs_update:
                 logger.info(
-                    f"原因: Frida 从 {util.strip_revision(last_project_tag)} 更新到 {last_frida_tag}"
+                    f"原因: Florida 从 {util.strip_revision(last_project_tag)} 更新到 {last_frida_tag}"
                 )
             else:
                 logger.info(

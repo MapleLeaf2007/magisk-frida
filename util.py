@@ -80,7 +80,7 @@ def get_last_frida_tag() -> str:
     logger.info("正在获取 Frida 发布信息")
     logger.info("=" * 50)
     try:
-        last_frida_tag = get_last_github_tag('frida/frida')
+        last_frida_tag = get_last_github_tag('Ylarod/Florida')
         logger.info(f"✓ 最后一个 frida 标签: {last_frida_tag}")
         return last_frida_tag
     except Exception as e:

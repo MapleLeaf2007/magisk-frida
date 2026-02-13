@@ -224,23 +224,23 @@ on_install() {
     abort
   fi
 
-  echo "[*] 正在解压 Frida-server 二进制..."
-  if ! busybox unzip -qq -o "$ZIPFILE" "files/frida-server-$F_ARCH" -j -d "$F_TARGETDIR" 2>/dev/null; then
-    echo "[-] 错误：为 $F_ARCH 解压 Frida-server 失败"
+  echo "[*] 正在解压 florida-server 二进制..."
+  if ! busybox unzip -qq -o "$ZIPFILE" "files/florida-server-$F_ARCH" -j -d "$F_TARGETDIR" 2>/dev/null; then
+    echo "[-] 错误：为 $F_ARCH 解压 florida-server 失败"
     ui_print "[-] 错误：解压失败"
     abort
   fi
 
-  echo "[+] 已解压 Frida-server"
+  echo "[+] 已解压 florida-server"
 
-  if ! mv "$F_TARGETDIR/frida-server-$F_ARCH" "$F_TARGETDIR/frida-server" 2>/dev/null; then
-    echo "[-] 错误：重命名 Frida-server 二进制文件失败"
+  if ! mv "$F_TARGETDIR/florida-server-$F_ARCH" "$F_TARGETDIR/florida-server" 2>/dev/null; then
+    echo "[-] 错误：重命名 florida-server 二进制文件失败"
     ui_print "[-] 错误：文件重命名失败"
     abort
   fi
 
-  echo "[+] Frida-server 安装完成"
-  ui_print "- Frida-server 安装完成"
+  echo "[+] florida-server 安装完成"
+  ui_print "- florida-server 安装完成"
 }
 
 # 只有少数特殊文件需要特殊权限
@@ -257,11 +257,11 @@ set_permissions() {
   echo "[+] 默认权限已应用"
 
   # 为 Frida-server 二进制设置自定义权限
-  echo "[*] 设置 Frida-server 可执行权限..."
-  if ! set_perm $MODPATH/system/bin/frida-server 0 2000 0755 u:object_r:system_file:s0; then
-    echo "[!] 警告：设置 Frida-server 权限失败（可能导致问题）"
+  echo "[*] 设置 florida-server 可执行权限..."
+  if ! set_perm $MODPATH/system/bin/florida-server 0 2000 0755 u:object_r:system_file:s0; then
+    echo "[!] 警告：设置 florida-server 权限失败（可能导致问题）"
   else
-    echo "[+] Frida-server 权限已配置"
+    echo "[+] florida-server 权限已配置"
   fi
 }
 
@@ -278,7 +278,7 @@ set_permissions
 # 处理模块被禁用的情况
 if [ -f $MODPATH/disable ]; then
   echo "[!] 检测到模块禁用标志"
-  string="description=开机时运行 frida-server：❌（已禁用）"
+  string="description=开机时运行 florida-server：❌（已禁用）"
   if ! sed -i "s/^description=.*/$string/g" $MODPATH/module.prop 2>/dev/null; then
     echo "[!] 警告：更新 module.prop 失败"
   fi

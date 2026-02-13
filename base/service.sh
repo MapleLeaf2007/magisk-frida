@@ -37,7 +37,7 @@ echo "[+] 实用函数已加载" >> $MODPATH/logs/service.log
 
 # 检查模块是否被禁用
 if [ -f $MODPATH/disable ]; then
-  echo "[!] 检测到模块禁用标志 - 跳过 Frida 启动" >> $MODPATH/logs/service.log
+  echo "[!] 检测到模块禁用标志 - 跳过 florida 启动" >> $MODPATH/logs/service.log
   exit 0
 fi
 
@@ -48,25 +48,25 @@ if ! wait_for_boot; then
   exit 1
 fi
 
-echo "[+] 启动完成，继续启动 Frida-server" >> $MODPATH/logs/service.log
+echo "[+] 启动完成，继续启动 florida-server" >> $MODPATH/logs/service.log
 
 # 验证 Frida-server 二进制文件是否存在
-FRIDA_BIN="$MODPATH/system/bin/frida-server"
+FRIDA_BIN="$MODPATH/system/bin/florida-server"
 if [ ! -f "$FRIDA_BIN" ]; then
-  echo "[ERROR] 在 $FRIDA_BIN 未找到 Frida-server 二进制文件" >> $MODPATH/logs/service.log
-  string="description=开机时运行 frida-server：❌（缺少二进制文件）"
+  echo "[ERROR] 在 $FRIDA_BIN 未找到 florida-server 二进制文件" >> $MODPATH/logs/service.log
+  string="description=开机时运行 florida-server：❌（缺少二进制文件）"
   sed -i "s/^description=.*/$string/g" $MODPATH/module.prop
   exit 1
 fi
 
-echo "[*] 正在启动 Frida-server 守护进程..." >> $MODPATH/logs/service.log
+echo "[*] 正在启动 florida-server 守护进程..." >> $MODPATH/logs/service.log
 
 # 启动 Frida-server
 if "$FRIDA_BIN" -D >> $MODPATH/logs/service.log 2>&1; then
-  echo "[+] Frida-server 守护进程已启动" >> $MODPATH/logs/service.log
+  echo "[+] florida-server 守护进程已启动" >> $MODPATH/logs/service.log
 else
-  echo "[ERROR] 启动 Frida-server 守护进程失败" >> $MODPATH/logs/service.log
-  string="description=开机时运行 frida-server：❌（启动失败）"
+  echo "[ERROR] 启动 florida-server 守护进程失败" >> $MODPATH/logs/service.log
+  string="description=开机时运行 florida-server：❌（启动失败）"
   sed -i "s/^description=.*/$string/g" $MODPATH/module.prop
   exit 1
 fi
@@ -75,12 +75,12 @@ fi
 sleep 1
 
 # 验证 Frida-server 是否正在运行
-echo "[*] 正在验证 Frida-server 启动..." >> $MODPATH/logs/service.log
+echo "[*] 正在验证 florida-server 启动..." >> $MODPATH/logs/service.log
 
 if check_frida_is_up 5; then
-  echo "[+] Frida-server 正在运行且已验证" >> $MODPATH/logs/service.log
+  echo "[+] florida-server 正在运行且已验证" >> $MODPATH/logs/service.log
 else
-  echo "[ERROR] Frida-server 未响应验证检查" >> $MODPATH/logs/service.log
+  echo "[ERROR] florida-server 未响应验证检查" >> $MODPATH/logs/service.log
 fi
 
 echo "" >> $MODPATH/logs/service.log

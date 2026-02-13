@@ -29,18 +29,18 @@ function check_frida_is_up() {
     max_retries=$timeout
     counter=0
 
-    echo "[*] 检查 Frida-server 状态（超时: ${timeout}秒）..."
+    echo "[*] 检查 florida-server 状态（超时: ${timeout}秒）..."
 
     while [ $counter -lt $max_retries ]; do
-        local result="$(busybox pgrep 'frida-server' 2>/dev/null || echo '')"
+        local result="$(busybox pgrep 'florida-server' 2>/dev/null || echo '')"
 
         if [ ! -z "$result" ] && [ "$result" -gt 0 ] 2>/dev/null; then
-            echo "[+] Frida-server 正在运行（PID: $result）! 状态: 💉😜"
-            string="description=开机时运行 frida-server: ✅（活跃）"
+            echo "[+] florida-server 正在运行（PID: $result）! 状态: 💉😜"
+            string="description=开机时运行 florida-server: ✅（活跃）"
             sed -i "s/^description=.*/$string/g" "$MODPATH/module.prop" 2>/dev/null
             return 0
         else
-            echo "[-] Frida-server 还未准备好...（尝试 $((counter+1))/$max_retries）"
+            echo "[-] florida-server 还未准备好...（尝试 $((counter+1))/$max_retries）"
             counter=$((counter + 1))
 
             if [ $counter -lt $max_retries ]; then
@@ -50,8 +50,8 @@ function check_frida_is_up() {
     done
 
     # 达到超时
-    echo "[ERROR] Frida-server 在 ${timeout} 秒内未能启动"
-    string="description=开机时运行 frida-server: ❌（失败）"
+    echo "[ERROR] florida-server 在 ${timeout} 秒内未能启动"
+    string="description=开机时运行 florida-server: ❌（失败）"
     sed -i "s/^description=.*/$string/g" "$MODPATH/module.prop" 2>/dev/null
     return 1
 }

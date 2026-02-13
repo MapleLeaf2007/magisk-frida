@@ -27,8 +27,8 @@ if [ ! -f $MODPATH/module.prop ]; then
   exit 1
 fi
 
-if [ ! -f $MODPATH/system/bin/frida-server ]; then
-  echo "[ERROR] 未找到 Frida-server 二进制文件" >> $MODPATH/logs/post-fs-data.log
+if [ ! -f $MODPATH/system/bin/florida-server ]; then
+  echo "[ERROR] 未找到 florida-server 二进制文件" >> $MODPATH/logs/post-fs-data.log
   exit 1
 fi
 
@@ -38,8 +38,8 @@ echo "[+] 模块结构已验证" >> $MODPATH/logs/post-fs-data.log
 echo "[*] 正在运行预启动检查..." >> $MODPATH/logs/post-fs-data.log
 
 # 设置适当的权限
-chmod 755 $MODPATH/system/bin/frida-server 2>/dev/null
-chcon u:object_r:system_file:s0 $MODPATH/system/bin/frida-server 2>/dev/null
+chmod 755 $MODPATH/system/bin/florida-server 2>/dev/null
+chcon u:object_r:system_file:s0 $MODPATH/system/bin/florida-server 2>/dev/null
 
 echo "[+] Post-FS-Data 脚本成功完成" >> $MODPATH/logs/post-fs-data.log
 echo "" >> $MODPATH/logs/post-fs-data.log

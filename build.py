@@ -162,7 +162,7 @@ name=MagiskFrida
 version={project_tag}
 versionCode={generate_version_code(project_tag)}
 author=ViRb3 & enovella
-updateJson=https://github.com/ViRb3/magisk-frida/releases/latest/download/updater.json
+updateJson=https://github.com/MapleLeaf2007/magisk-frida/releases/latest/download/updater.json
 description=在启动时运行 frida-server"""
 
         prop_file = path.joinpath("module.prop")
@@ -218,8 +218,8 @@ def fill_module(arch: str, frida_tag: str, project_tag: str):
 
     try:
         frida_download_url = (
-            f"https://github.com/frida/frida/releases/download/{frida_tag}/")
-        frida_server = f"frida-server-{frida_tag}-android-{arch}.xz"
+            f"https://github.com/Ylarod/Florida/releases/download/{frida_tag}/")
+        frida_server = f"florida-server-{frida_tag}-android-{arch}.xz"
         frida_server_path = PATH_DOWNLOADS.joinpath(frida_server)
 
         logger.info(f"[{arch}] 正在下载 Frida {frida_tag} 用于 {arch}...")
@@ -228,9 +228,9 @@ def fill_module(arch: str, frida_tag: str, project_tag: str):
         files_dir = PATH_BUILD_TMP.joinpath("files")
         files_dir.mkdir(exist_ok=True)
 
-        logger.info(f"[{arch}] 正在解压 Frida-server...")
+        logger.info(f"[{arch}] 正在解压 Florida-server...")
         extract_file(frida_server_path,
-                     files_dir.joinpath(f"frida-server-{arch}"))
+                     files_dir.joinpath(f"florida-server-{arch}"))
 
         logger.info(f"[{arch}] ✓ 完成成功")
 
@@ -255,9 +255,9 @@ def create_updater_json(project_tag: str):
             "versionCode":
             generate_version_code(project_tag),
             "zipUrl":
-            f"https://github.com/ViRb3/magisk-frida/releases/download/{project_tag}/MagiskFrida-{project_tag}.zip",
+            f"https://github.com/MapleLeaf2007/magisk-frida/releases/download/{project_tag}/MagiskFrida-{project_tag}.zip",
             "changelog":
-            "https://raw.githubusercontent.com/ViRb3/magisk-frida/master/CHANGELOG.md",
+            "https://raw.githubusercontent.com/MapleLeaf2007/magisk-frida/master/CHANGELOG.md",
         }
 
         updater_file = PATH_BUILD.joinpath("updater.json")
@@ -279,10 +279,10 @@ def package_module(project_tag: str):
     参数:
         project_tag: 版本标签
     """
-    logger.info(f"正在将模块打包为 MagiskFrida-{project_tag}.zip...")
+    logger.info(f"正在将模块打包为 MagiskFlorida-{project_tag}.zip...")
 
     try:
-        module_zip = PATH_BUILD.joinpath(f"MagiskFrida-{project_tag}.zip")
+        module_zip = PATH_BUILD.joinpath(f"MagiskFlorida-{project_tag}.zip")
 
         file_count = 0
         with zipfile.ZipFile(module_zip, "w",
@@ -317,13 +317,13 @@ def do_build(frida_tag: str, project_tag: str):
     为所有架构执行完整的构建过程
     
     参数:
-        frida_tag: Frida 版本标签
+        frida_tag: Florida 版本标签
         project_tag: 项目版本标签
     """
     logger.info("=" * 70)
     logger.info("开始构建流程")
     logger.info("=" * 70)
-    logger.info(f"Frida 版本: {frida_tag}")
+    logger.info(f"Florida 版本: {frida_tag}")
     logger.info(f"项目版本: {project_tag}")
     logger.info(f"构建目录: {PATH_BUILD}")
     logger.info("=" * 70)
@@ -365,9 +365,9 @@ def do_build(frida_tag: str, project_tag: str):
         logger.info("=" * 70)
         logger.info("✓ 构建成功完成")
         logger.info("=" * 70)
-        logger.info(f"模块: MagiskFrida-{project_tag}.zip")
+        logger.info(f"模块: MagiskFlorida-{project_tag}.zip")
         logger.info(
-            f"位置: {PATH_BUILD.joinpath(f'MagiskFrida-{project_tag}.zip')}"
+            f"位置: {PATH_BUILD.joinpath(f'MagiskFlorida-{project_tag}.zip')}"
         )
         logger.info("=" * 70)
 
